@@ -6,4 +6,5 @@ JS_PATH_DIST=${JS_PATH}dist/
 
 find $JS_PATH_SRC -type f -name '*.js'|sort|xargs cat > ${JS_PATH_DIST}game.js
 
+echo yes|python3 manage.py collectstatic
 echo "complete!!!"
