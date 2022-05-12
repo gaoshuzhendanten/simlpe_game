@@ -16,9 +16,11 @@ class AcGamePlayground {
         }
         
         this.hinders = [];
-        this.hinders.push(new Hinder(this,2*this.game_map.block_width,4*this.game_map.block_width,2*this.game_map.block_height,7*this.game_map.block_height));
-        this.hinders.push(new Hinder(this,5*this.game_map.block_width,8*this.game_map.block_width,3*this.game_map.block_height,4*this.game_map.block_height));
-        this.hinders.push(new Hinder(this,5*this.game_map.block_width,8*this.game_map.block_width,6*this.game_map.block_height,7*this.game_map.block_height));
+        this.hinders.push(new Hinder(this,2*this.game_map.block_width,2.5*this.game_map.block_width,2*this.game_map.block_height,7*this.game_map.block_height));
+
+        this.hinders.push(new Hinder(this,3.6*this.game_map.block_width,4*this.game_map.block_width,2*this.game_map.block_height,7*this.game_map.block_height)); 
+        this.hinders.push(new Hinder(this,5.5*this.game_map.block_width,8*this.game_map.block_width,3*this.game_map.block_height,4*this.game_map.block_height));
+        this.hinders.push(new Hinder(this,5.5*this.game_map.block_width,8*this.game_map.block_width,6*this.game_map.block_height,7*this.game_map.block_height));
         this.start();
     }
 

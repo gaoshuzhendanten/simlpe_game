@@ -11,17 +11,24 @@ class Player extends AcGameObject{
         this.x = xx[stat]*this.block_width;
         this.y = yy[stat]*this.block_height;
         this.color = colors[stat];
-        this.radius = Math.min(this.block_width/2,this.block_height/2);
-        this.color = colors[stat]; 
+        this.radius = Math.min(this.block_width/2,this.block_height/2)*0.8;
+        this.color = colors[stat];
         this.is_me = is_me;
         this.speed = 1;
         this.vx = 0;
         this.vy = 0;
+        this.lift = 1;
         this.cnt = 0;//使AI的走动更流畅，减少抖动
+        this.can_attacked = 0;
+    }
+    get_food(){
+        if(this.can_attacked>5) return;
+        this.can_attacked++;
     }
 
     start(){
         if(this.is_me){
+            this.speed*=1.2;
             this.add_listening_events();
         }else{
 
@@ -39,9 +46,12 @@ class Player extends AcGameObject{
             let color = "orange";
             let speed = outer.speed;
             let move_length = outer.playground.height * 1;
-            new FireBall(outer.playground, outer, x, y, radius, outer.vx, outer.vy, color, speed, move_length);
+            console.log(outer.lift);
+            if(outer.lift&&outer.can_attacked) {
+                outer.can_attacked--;
+                new FireBall(outer.playground, outer, x, y, radius, outer.vx, outer.vy, color, speed, move_length);
+            }
         });
-
         let dx = [0,0,-1,1];
         let dy = [-1,1,0,0];
         $(window).keydown(function(e) {
@@ -85,15 +95,18 @@ class Player extends AcGameObject{
         let dx = [0,0,-1,1];
         let dy = [-1,1,0,0];
         let back_index = 0;
-        if(this.is_me){
+        if(!this.is_me){
             for(let i=0;i<this.playground.players.length;i++){
                 let player = this.playground.players[i];
-                if(player!=this&&this.is_collision(player)){
-                    this.is_attacked();
+                if(player.is_me&&this.is_collision(player)){
+                    player.is_attacked();
+                    break;
                 }
             }
         }
         if(!this.is_me){
+            if(this.playground.players.length==1)
+                return;
             this.cnt++;
             if(this.cnt>15){
                 this.cnt = 0;
@@ -178,6 +191,14 @@ class Player extends AcGameObject{
         //this.ctx.arc(this.playground.width/2,this.playground.height/2,this.playground.height*0.05,0,Math.PI*2,false);
         this.ctx.fillStyle = this.color;
         this.ctx.fill();
+        for(let i=0;i<this.can_attacked;i++){
+            this.ctx.lineWidth = 10;
+            this.ctx.strokeStyle = "yellow";
+            this.ctx.arc(this.x,this.y,this.radius+10*(i+1),0,2*Math.PI);
+            this.ctx.stroke();
+        }
+        
+
     }
 
     is_attacked() {
@@ -196,6 +217,7 @@ class Player extends AcGameObject{
 
 
     pre_destroy(){
+        this.lift = 0;
         for (let i = 0; i < this.playground.players.length; i ++ ) {
             if (this.playground.players[i] === this) {
                 this.playground.players.splice(i, 1);

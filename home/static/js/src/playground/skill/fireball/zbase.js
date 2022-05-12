@@ -35,7 +35,7 @@ class FireBall extends AcGameObject{
 
     attack(player) {
         let angle = Math.atan2(player.y - this.y, player.x - this.x);
-        player.is_attacked(angle);
+        player.is_attacked();
         console.log(this.playground.players.length);
         this.destroy();
     }

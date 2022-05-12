@@ -8,18 +8,19 @@ class GameMap extends AcGameObject{
         this.ctx.canvas.height = this.playground.height;
         this.block_width = this.ctx.canvas.width/10;
         this.block_height = this.ctx.canvas.height/10;
-
-
+        this.cnt = 0;
         this.playground.$playground.append(this.$canvas);
-        
-
-
     }
 
     start(){
     }
 
     update(){
+        this.cnt++;
+        if(this.cnt>700){
+            new Food(this.playground);
+            this.cnt = 0;
+        }
         this.render();
     }
 
