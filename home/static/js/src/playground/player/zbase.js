@@ -20,6 +20,11 @@ class Player extends AcGameObject{
         this.lift = 1;
         this.cnt = 0;//使AI的走动更流畅，减少抖动
         this.can_attacked = 0;
+        if (this.is_me) {
+            this.img = new Image();
+            this.img.src = this.playground.root.settings.photo;
+        }
+
     }
     get_food(){
         if(this.can_attacked>5) return;
@@ -186,19 +191,30 @@ class Player extends AcGameObject{
     }
 
     render(){
-        this.ctx.beginPath();
-        this.ctx.arc(this.x,this.y,this.radius,0,Math.PI*2,false);
-        //this.ctx.arc(this.playground.width/2,this.playground.height/2,this.playground.height*0.05,0,Math.PI*2,false);
-        this.ctx.fillStyle = this.color;
-        this.ctx.fill();
+        if(this.is_me){
+            this.ctx.save();
+            this.ctx.lineWidth = 1;
+            this.ctx.strokeStyle = "black";
+            this.ctx.beginPath();
+            this.ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+            this.ctx.stroke();
+            this.ctx.clip();
+            this.ctx.drawImage(this.img, this.x - this.radius, this.y - this.radius, this.radius * 2, this.radius * 2); 
+            this.ctx.restore();
+
+        }else{
+            this.ctx.beginPath();
+            this.ctx.arc(this.x,this.y,this.radius,0,Math.PI*2,false);
+            //this.ctx.arc(this.playground.width/2,this.playground.height/2,this.playground.height*0.05,0,Math.PI*2,false);
+            this.ctx.fillStyle = this.color;
+            this.ctx.fill();
+        }
         for(let i=0;i<this.can_attacked;i++){
             this.ctx.lineWidth = 10;
             this.ctx.strokeStyle = "yellow";
-            this.ctx.arc(this.x,this.y,this.radius+10*(i+1),0,2*Math.PI);
+            this.ctx.arc(this.x,this.y,this.radius+11*(i+1),0,2*Math.PI);
             this.ctx.stroke();
         }
-        
-
     }
 
     is_attacked() {
