@@ -9,5 +9,6 @@ urlpatterns = [
     path("login/",signin,name="setting_login"),
     path("logout/",signout,name="setting_logout"),
     path("register/",register,name="setting_register"),
+    path("acwing/",include("home.urls.settings.acwing.index")),
 ]
 
