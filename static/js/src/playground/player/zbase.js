@@ -1,5 +1,5 @@
 class Player extends AcGameObject{
-    constructor(playground,stat,is_me){
+    constructor(playground,stat,character,username,photo){
         super();
         this.playground = playground;
         this.block_width = this.playground.game_map.block_width;
@@ -13,16 +13,19 @@ class Player extends AcGameObject{
         this.color = colors[stat];
         this.radius = Math.min(this.block_width/2,this.block_height/2)*0.8;
         this.color = colors[stat];
-        this.is_me = is_me;
+        this.character = character;
+
+        this.username = username;
+        this.photo = photo;
         this.speed = 1;
         this.vx = 0;
         this.vy = 0;
         this.lift = 1;
         this.cnt = 0;//使AI的走动更流畅，减少抖动
         this.can_attacked = 0;
-        if (this.is_me) {
+        if (this.character != "robot") {
             this.img = new Image();
-            this.img.src = this.playground.root.settings.photo;
+            this.img.src = this.photo;
         }
 
     }
@@ -32,7 +35,7 @@ class Player extends AcGameObject{
     }
 
     start(){
-        if(this.is_me){
+        if(this.character === "me"){
             this.speed*=1.2;
             this.add_listening_events();
         }else{
@@ -100,16 +103,16 @@ class Player extends AcGameObject{
         let dx = [0,0,-1,1];
         let dy = [-1,1,0,0];
         let back_index = 0;
-        if(!this.is_me){
+        if(this.character === "robot"){
             for(let i=0;i<this.playground.players.length;i++){
                 let player = this.playground.players[i];
-                if(player.is_me&&this.is_collision(player)){
+                if(player.character!="robot"&&this.is_collision(player)){
                     player.is_attacked();
                     break;
                 }
             }
         }
-        if(!this.is_me){
+        if(this.character==="robot"){
             if(this.playground.players.length==1)
                 return;
             this.cnt++;
@@ -169,7 +172,7 @@ class Player extends AcGameObject{
                 break;
             }
         }
-        if(ok==0&&!this.is_me){
+        if(ok==0&&this.character=="robot"){
             this.vx = dx[back_index];
             this.vy = dy[back_index];
             let moved_x = this.vx * this.speed * this.timedelta / 10;
@@ -191,7 +194,7 @@ class Player extends AcGameObject{
     }
 
     render(){
-        if(this.is_me){
+        if(this.character!="robot"){
             this.ctx.save();
             this.ctx.lineWidth = 1;
             this.ctx.strokeStyle = "black";

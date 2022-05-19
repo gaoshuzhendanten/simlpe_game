@@ -25,7 +25,7 @@ class Food extends AcGameObject {
 
         for (let i = 0; i < this.playground.players.length; i ++ ) {
             let player = this.playground.players[i];
-            if(!player.is_me) continue;
+            if(player.character === "robot") continue;
             if (this.is_collision(player)) {
                 player.get_food();
                 this.destroy();
